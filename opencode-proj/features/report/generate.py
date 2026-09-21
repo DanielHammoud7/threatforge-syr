@@ -57,13 +57,31 @@ def ar(text: str) -> str:
 
 
 def _resolve_font() -> Path:
+    # 1. البحث في القائمة المعرفة مسبقاً (FONT_CANDIDATES)
     for candidate in FONT_CANDIDATES:
         if candidate.exists():
             return candidate
-    raise FileNotFoundError(
-        "لم يُعثر على خط TTF يدعم العربية — أضف مسار خطاً صالحاً إلى FONT_CANDIDATES في config.py"
-    )
+            
+    # 2. بحث تلقائي احتياطي في مسارات نظام لينكس (Streamlit Cloud)
+    linux_paths = [
+        Path("/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf"),
+        Path("/usr/share/fonts/truetype/noto/NotoKufiArabic-Regular.ttf"),
+        Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
+    ]
+    
+    for path in linux_paths:
+        if path.exists():
+            return path
+            
+    # 3. بحث شامل بأي خط متاح في مجلدات النظام إذا لم يتم العثور على الخط المحدد
+    fallback_dir = Path("/usr/share/fonts/truetype/noto")
+    if fallback_dir.exists():
+        for font_file in fallback_dir.glob("*.ttf"):
+            return font_file
 
+    raise FileNotFoundError(
+        "لم يُعثر على خط TTF يدعم العربية — تأكد من إضافة 'fonts-noto-arabic' إلى ملف packages.txt"
+    )
 
 def _styles() -> dict[str, ParagraphStyle]:
     base = ParagraphStyle(
