@@ -77,7 +77,7 @@ streamlit run app.py
 pytest
 ```
 
-**40/40 اختبار ناجح** — يشمل:
+**42/42 اختباراً ناجحاً** — يشمل:
 - اختباراً تكاملياً E2E حقيقياً (صورة عربية → OCR → تحليل → PDF → تشفير → تحقق → رفض العبارة الخاطئة).
 - اختبار تلاعب الأدلة (بايت واحد في `report.enc` / تعديل `report.pdf` / تعديل `manifest.json`).
 - رحلة واجهة كاملة S0→S7 عبر `streamlit.testing.v1.AppTest`.
@@ -102,6 +102,12 @@ data/arabic_stopwords.txt      # stopwords عربية مضمّنة (بلا تن�
 data/tessdata/                 # ara + eng traineddata (محمول)
 tests/                         # 8 ملفات — 40 اختباراً
 ```
+
+### النشر على Streamlit Cloud / حاويات Linux
+
+- **لا حاجة لـ `packages.txt` لإضافة خطوط**: المشروع يضمّ خطاً عربياً مضمّناً (`data/fonts/NotoNaskhArabic-Regular.ttf`) يضمن توليد PDF حتى في صورة نظام بلا أي خطوط — ويُستخدم تلقائياً كملاذ أخير في `FONT_CANDIDATES`.
+- تأكد فقط من وصول `data/fonts/` و`data/tessdata/` مع حزمة النشر (لا تحذفهما في أي `.gitignore` مخصص للنشر).
+- ثنائي Tesseract على الحاويات: `apt-get install -y tesseract-ocr tesseract-ocr-ara tesseract-ocr-eng` (أو وضع الحزمتين في `packages.txt` لـ Streamlit Cloud).
 
 ---
 

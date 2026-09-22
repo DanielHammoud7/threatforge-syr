@@ -80,7 +80,8 @@ def _resolve_font() -> Path:
             return font_file
 
     raise FileNotFoundError(
-        "لم يُعثر على خط TTF يدعم العربية — تأكد من إضافة 'fonts-noto-arabic' إلى ملف packages.txt"
+        "لم يُعثر على خط TTF يدعم العربية — تأكد من وجود data/fonts/NotoNaskhArabic-Regular.ttf "
+        "(يُسلَّم مضمّناً داخل المشروع) ضمن حزمة النشر"
     )
 
 def _styles() -> dict[str, ParagraphStyle]:

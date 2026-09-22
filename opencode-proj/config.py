@@ -56,5 +56,6 @@ FONT_CANDIDATES = [
     Path(r"C:\Windows\Fonts\Segoe UI.ttf"),
     Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
     Path("/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf"),
+    DATA_DIR / "fonts" / "NotoNaskhArabic-Regular.ttf",  # مضمّن — ضمان عمل التقرير بلا خطوط نظام
 ]
 PDF_PAGE_CM = (21.0, 29.7)  # A4

@@ -83,3 +83,30 @@ def test_benign_report_still_builds():
 
 def test_arabic_shaping_util():
     assert generate.ar("مرحبا بالعالم") != ""
+
+
+# ── حصانة SRE (Regression): لا انهيار أبداً عند غياب خطوط النظام بفضل الخط المضمّن ──
+def _bundled_font():
+    bundled = next(f for f in generate.FONT_CANDIDATES if f.name.startswith("NotoNaskhArabic"))
+    assert bundled.exists(), "الخط المضمّن data/fonts/NotoNaskhArabic-Regular.ttf مفقود!"
+    return bundled
+
+
+def test_resolve_font_uses_bundled_when_no_system_fonts(monkeypatch):
+    # بيئة مثل حاوية Streamlit Cloud بلا خطوط نظام: مرشّح واحد فقط — الخط المضمّن
+    monkeypatch.setattr(generate, "FONT_CANDIDATES", [_bundled_font()])
+    assert generate._resolve_font() == _bundled_font()
+
+
+def test_build_pdf_succeeds_with_only_bundled_font(monkeypatch):
+    monkeypatch.setattr(generate, "FONT_CANDIDATES", [_bundled_font()])
+    analysis = redflags.analyze(THREAT_EXTORTION)
+    legal = mapping.legal_qualification(analysis)
+    data = generate.ReportData(
+        case_id="SYR-FONT-0001", created_utc="2026-09-22T00:00:00+00:00",
+        analysis=analysis, legal=legal, original_text=THREAT_EXTORTION, ocr_text="",
+        image_bytes=None, image_name=None, sha256_report="",
+    )
+    pdf = generate.build_pdf(data)
+    assert pdf[:5] == b"%PDF-"
+    assert len(pdf) > 3000
