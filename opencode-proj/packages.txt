@@ -1,1 +1,4 @@
 fonts-noto-arabic
+tesseract-ocr
+tesseract-ocr-ara
+tesseract-ocr-eng
