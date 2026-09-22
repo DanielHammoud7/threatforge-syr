@@ -11,6 +11,7 @@ import logging
 import streamlit as st
 
 from core.logging import setup_logging
+from core.ui import inject_css, risk_badge
 import config
 from config import APP_NAME, APP_TAGLINE, APP_VERSION, MIN_PASSPHRASE_LEN
 from features.analysis import redflags
@@ -24,12 +25,17 @@ log = logging.getLogger("app")
 
 st.set_page_config(page_title=f"{APP_NAME} — كشف وتوثيق", page_icon="🛡️", layout="centered")
 
+inject_css()
+
 st.title(APP_NAME)
 st.caption(f"{APP_TAGLINE} · الإصدار {APP_VERSION}")
 
 st.markdown(
+    '<div class="tf-intro">' +
     "هذه المنصة تحلل المحتوى المشبوه (نص/لقطة شاشة) لكشف مؤشرات الابتزاز والتهديد "
     "والاحتيال وانتهاك الخصوصية، ثم توثّق الأدلة في تقرير PDF مُشفّر وبصمته SHA-256 تثبت عدم التلاعب."
+    + "</div>",
+    unsafe_allow_html=True,
 )
 
 # ───────────────────────── S0: الادخال ─────────────────────────
@@ -93,6 +99,7 @@ if analysis is not None:
             "لا تدفع أي مبلغ ولا تشارك بيانات إضافية؛ وثّق الأدلة الآن وحافظ على النسخ الأصلية."
         )
     col1, col2, col3 = st.columns(3)
+    st.markdown(risk_badge(analysis["band_ar"], analysis["band_en"]), unsafe_allow_html=True)
     col1.metric("مؤشر الخطورة", f"{analysis['score']}/100", analysis["band_ar"])
     col2.metric("الفئات المرصودة", len(analysis["categories"]))
     col3.metric("المؤشرات السلوكية", len(analysis["flags"]))

@@ -90,6 +90,7 @@ pytest
 app.py                  # منسّق الحالات S0→S7 (Streamlit)
 config.py               # الثوابت: مسارات، نطاقات، معاملات KDF/التقدير
 core/logging.py         # تسجيل لامركزي (rotating + آمن للطرفية)
+core/ui.py              # طبقة الواجهة المشتركة: CSS مخصص + شارة نطاق الخطر
 features/ingestion/ocr.py      # S0+S1: استخراج النص من الصور
 features/analysis/nlp.py       # S2: تطبيع + tokenize عربي
 features/analysis/redflags.py  # S3: محرك قواعد وزني (data/redflags.toml)
