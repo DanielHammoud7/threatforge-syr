@@ -27,6 +27,9 @@ ALLOWED_IMAGE_EXT = {".png", ".jpg", ".jpeg"}
 TESSERACT_CANDIDATES = [
     Path(r"C:\Program Files\Tesseract-OCR\tesseract.exe"),
     Path(r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"),
+    Path("/usr/bin/tesseract"),
+    Path("/usr/local/bin/tesseract"),
+
 ]
 
 # ── التحليل ونطاقات الخطر ──────────────────────────────────────────
